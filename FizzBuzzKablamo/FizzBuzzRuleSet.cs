@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FizzBuzzKablamo
+﻿namespace FizzBuzzKablamo
 {
-
     public enum FizzBuzzRuleSet
     {
         FizzBuzzDivisible,
@@ -14,5 +7,4 @@ namespace FizzBuzzKablamo
         FizzBuzzDigits,
         FizzBuzzDivisibleOrDigits
     }
-
 }

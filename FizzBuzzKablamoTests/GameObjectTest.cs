@@ -11,8 +11,15 @@ namespace FizzBuzzKablamoTests
         [Test]
         public void WrapsEnumsCorrectly()
         {
-            Assert.AreEqual(GameObject.Token.Boom.ToString(), new GameObject(GameObject.Token.Boom).AsString());
-            Assert.AreEqual((int)GameObject.Token.Boom, new GameObject(GameObject.Token.Boom).AsValue());
+            Assert.AreEqual(GameObject.Token.Boom.ToString(), new TestableGameObject(GameObject.Token.Boom).AsString());
+            Assert.AreEqual((int)GameObject.Token.Boom, new TestableGameObject(GameObject.Token.Boom).AsValue());
+        }
+    }
+
+    internal class TestableGameObject : GameObject
+    {
+        public TestableGameObject(Token gameToken) : base(gameToken)
+        {
         }
     }
 

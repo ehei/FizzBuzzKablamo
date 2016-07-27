@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FizzBuzzKablamo;
+﻿using FizzBuzzKablamo;
 using NUnit.Framework;
 
 namespace FizzBuzzKablamoTests
@@ -74,6 +69,22 @@ namespace FizzBuzzKablamoTests
 
             Assert.IsTrue(engine.ChecksDivisible());
             Assert.IsTrue(engine.ChecksDigits());
+        }
+
+        [Test]
+        public void Digits_325395()
+        {
+            var engine = FizzBuzzEngineFactory.Create(FizzBuzzRuleSet.FizzBuzzDigits) as IFizzBuzzEngineExtended;
+
+            Assert.AreEqual("FizzBuzzFizzBuzz", engine.GetString(325395));
+        }
+
+        [Test]
+        public void ShouldEvaluateForDigitsAfterEvaluatingForDivisor_51435()
+        {
+            var engine = FizzBuzzEngineFactory.Create(FizzBuzzRuleSet.FizzBuzzDivisibleOrDigits) as IFizzBuzzEngineExtended;
+
+            Assert.AreEqual("FizzBuzzBuzzFizzBuzz", engine.GetString(51435));
         }
     }
 }

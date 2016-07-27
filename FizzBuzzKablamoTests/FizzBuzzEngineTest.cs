@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using FizzBuzzKablamo;
+﻿using FizzBuzzKablamo;
 using NUnit.Framework;
 
 namespace FizzBuzzKablamoTests
@@ -25,18 +24,20 @@ namespace FizzBuzzKablamoTests
         }
 
         [Test]
-        public void SetDigitMode_MakesChecksDigitsReturnTrue()
+        public void SetDigitMode_WillCauseDigitEvaluatorsToBeAddedForToken()
         {
             engine.SetDigitMode();
+            engine.Add(GameObject.Token.Crash);
 
             Assert.IsTrue(engine.ChecksDigits());
             Assert.IsFalse(engine.ChecksDivisible());
         }
 
         [Test]
-        public void SetDivisionMode_MakesChecksDivisibleReturnTrue()
+        public void SetDivisionMode_WillCauseDivisorEvaluatorsToBeAddedForToken()
         {
             engine.SetDivisionMode();
+            engine.Add(GameObject.Token.Crash);
 
             Assert.IsFalse(engine.ChecksDigits());
             Assert.IsTrue(engine.ChecksDivisible());
@@ -45,6 +46,7 @@ namespace FizzBuzzKablamoTests
         [Test]
         public void Supports_ReturnsTrue_IfTokenWasAdded()
         {
+            engine.SetDivisionMode();
             engine.Add(GameObject.Token.Bang);
             engine.Add(GameObject.Token.Crash);
 
@@ -55,21 +57,13 @@ namespace FizzBuzzKablamoTests
         [Test]
         public void Supports_ReturnsFalse_ForTokensNotAdded()
         {
+            engine.SetDivisionMode();
             engine.Add(GameObject.Token.Bang);
             engine.Add(GameObject.Token.Crash);
 
             Assert.IsFalse(engine.Supports(GameObject.Token.Boom));
             Assert.IsFalse(engine.Supports(GameObject.Token.Buzz));
             Assert.IsFalse(engine.Supports(GameObject.Token.Fizz));
-        }
-
-        [Test]
-        public void Supports_ReturnsFalse_ForTokensThatWereRemoved()
-        {
-            engine.Add(GameObject.Token.Bang);
-            engine.Remove(GameObject.Token.Bang);
-
-            Assert.IsFalse(engine.Supports(GameObject.Token.Bang));
         }
 
         [Test]
@@ -82,24 +76,6 @@ namespace FizzBuzzKablamoTests
             Assert.AreEqual("Fizz", engine.GetString(9));
             Assert.AreEqual("Fizz", engine.GetString(3333));
             Assert.AreEqual("Fizz", engine.GetString(3));
-        }
-
-        [Test]
-        public void CheckDivisible_ReturnsTrue_IfValueIsDivisibleByTokenValue()
-        {
-            Assert.IsFalse(engine.CheckDivisible(1, GameObject.Token.Fizz));
-            Assert.IsTrue(engine.CheckDivisible(9, GameObject.Token.Fizz));
-            Assert.IsTrue(engine.CheckDivisible(3, GameObject.Token.Fizz));
-            Assert.IsTrue(engine.CheckDivisible(150, GameObject.Token.Buzz));
-        }
-
-        [Test]
-        public void CheckDigit_ReturnsTrue_IfValueIsThatDigit()
-        {
-            Assert.IsFalse(engine.CheckDigit(1, GameObject.Token.Fizz));
-            Assert.IsTrue(engine.CheckDigit(3, GameObject.Token.Fizz));
-            Assert.IsFalse(engine.CheckDigit(9, GameObject.Token.Fizz));
-            Assert.IsFalse(engine.CheckDigit(150, GameObject.Token.Buzz));
         }
 
         [Test]
@@ -131,13 +107,7 @@ namespace FizzBuzzKablamoTests
         }
 
         [Test]
-        public void Test1()
-        {
-            Assert.IsFalse(engine.CheckDivisible(4, GameObject.Token.Fizz));
-        } 
-
-        [Test]
-        public void Test2()
+        public void TestDivisionWithFizzAndBuzz_UndivisibleValue()
         {
             engine.SetDivisionMode();
 
@@ -148,7 +118,7 @@ namespace FizzBuzzKablamoTests
         }
 
         [Test]
-        public void Test3()
+        public void TestDivisionWithFizzAndBuzz_DivisibleByBoth()
         {
             engine.SetDivisionMode();
 
@@ -156,6 +126,34 @@ namespace FizzBuzzKablamoTests
             engine.Add(GameObject.Token.Buzz);
 
             Assert.AreEqual("FizzBuzz", engine.GetString(15));
+        }
+
+        [Test]
+        public void TestBothModesWithFizzAndBuzz_Divisible()
+        {
+            engine.SetDivisionMode();
+            engine.SetDigitMode();
+
+            engine.Add(GameObject.Token.Fizz);
+            engine.Add(GameObject.Token.Buzz);
+
+            Assert.AreEqual("FizzBuzzBuzz", engine.GetString(15));
+            Assert.AreEqual("BuzzBuzz", engine.GetString(50));
+            Assert.AreEqual("FizzFizzFizz", engine.GetString(33));
+        }
+
+        [Test]
+        public void TestBothModesWithFizzAndBuzz_NotDivisible_FallsBackToDigits()
+        {
+            engine.SetDivisionMode();
+            engine.SetDigitMode();
+
+            engine.Add(GameObject.Token.Fizz);
+            engine.Add(GameObject.Token.Buzz);
+
+            Assert.AreEqual("BuzzFizz", engine.GetString(53));
+            Assert.AreEqual("FizzBuzzFizz", engine.GetString(353));
+            Assert.AreEqual("BuzzBuzzBuzzBuzzFizzFizzFizz", engine.GetString(5555333));
         }
     }
 
