@@ -71,5 +71,20 @@ namespace FizzBuzzKablamoTests
             Assert.IsTrue(engine.ChecksDigits());
         }
 
+        [Test]
+        public void Digits_325395()
+        {
+            var engine = FizzBuzzEngineFactory.Create(FizzBuzzRuleSet.FizzBuzzDigits) as IFizzBuzzEngineExtended;
+
+            Assert.AreEqual("FizzBuzzFizzBuzz", engine.GetString(325395));
+        }
+
+        [Test]
+        public void ShouldEvaluateForDigitsAfterEvaluatingForDivisor_51435()
+        {
+            var engine = FizzBuzzEngineFactory.Create(FizzBuzzRuleSet.FizzBuzzDivisibleOrDigits) as IFizzBuzzEngineExtended;
+
+            Assert.AreEqual("FizzBuzzBuzzFizzBuzz", engine.GetString(51435));
+        }
     }
 }

@@ -137,9 +137,9 @@ namespace FizzBuzzKablamoTests
             engine.Add(GameObject.Token.Fizz);
             engine.Add(GameObject.Token.Buzz);
 
-            Assert.AreEqual("FizzBuzz", engine.GetString(15));
-            Assert.AreEqual("Buzz", engine.GetString(50));
-            Assert.AreEqual("Fizz", engine.GetString(33));
+            Assert.AreEqual("FizzBuzzBuzz", engine.GetString(15));
+            Assert.AreEqual("BuzzBuzz", engine.GetString(50));
+            Assert.AreEqual("FizzFizzFizz", engine.GetString(33));
         }
 
         [Test]

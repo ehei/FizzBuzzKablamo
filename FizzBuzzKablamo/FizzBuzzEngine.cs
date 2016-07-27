@@ -54,9 +54,6 @@ namespace FizzBuzzKablamo
 
             string fullReturn = _divisionEvaluators.Where(evaluator => evaluator.Evaluate(number)).Aggregate<IEvaluatableGameObject, string>(null, (current, evaluator) => current + evaluator.AsString());
 
-            if (!String.IsNullOrEmpty(fullReturn))
-                return fullReturn;
-
             var digitize = number.ToString().ToCharArray();
             fullReturn = (from digit in digitize select Int32.Parse(digit.ToString()) into value from evaluator in _digitEvaluators where evaluator.Evaluate(value) select evaluator).Aggregate(fullReturn, (current, evaluator) => current + evaluator.AsString());
 
