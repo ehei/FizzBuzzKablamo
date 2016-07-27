@@ -48,6 +48,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DigitizerTest.cs" />
+    <Compile Include="DivisorTest.cs" />
+    <Compile Include="EvaluatableGameObjectComparerTest.cs" />
     <Compile Include="FizzBuzzEngineTest.cs" />
     <Compile Include="FizzBuzzEngineFactoryTest.cs" />
     <Compile Include="GameObjectTest.cs" />

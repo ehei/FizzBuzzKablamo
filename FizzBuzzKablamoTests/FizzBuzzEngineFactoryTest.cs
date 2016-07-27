@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FizzBuzzKablamo;
+﻿using FizzBuzzKablamo;
 using NUnit.Framework;
 
 namespace FizzBuzzKablamoTests
@@ -75,5 +70,6 @@ namespace FizzBuzzKablamoTests
             Assert.IsTrue(engine.ChecksDivisible());
             Assert.IsTrue(engine.ChecksDigits());
         }
+
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FizzBuzzKablamo
 {
@@ -12,6 +9,23 @@ namespace FizzBuzzKablamo
         {
             var engine = new FizzBuzzEngine();
 
+            switch (ruleSet)
+            {
+                case FizzBuzzRuleSet.FizzBuzzDivisible:
+                case FizzBuzzRuleSet.FizzBuzzBoomBangCrashDivisible:
+                    engine.SetDivisionMode();
+                    break;
+                case FizzBuzzRuleSet.FizzBuzzDigits:
+                    engine.SetDigitMode();
+                    break;
+                case FizzBuzzRuleSet.FizzBuzzDivisibleOrDigits:
+                // intentional fall through
+                default:
+                    engine.SetDivisionMode();
+                    engine.SetDigitMode();
+                    break;
+            }
+
             var name = ruleSet.ToString();
 
             foreach (var validToken in Enum.GetValues(typeof (GameObject.Token))
@@ -19,19 +33,6 @@ namespace FizzBuzzKablamo
                 .Where(value => name.Contains(value.ToString())))
             {
                 engine.Add(validToken);
-            }
-
-            if (ruleSet == FizzBuzzRuleSet.FizzBuzzDivisible ||
-                ruleSet == FizzBuzzRuleSet.FizzBuzzBoomBangCrashDivisible ||
-                ruleSet == FizzBuzzRuleSet.FizzBuzzDivisibleOrDigits)
-            {
-                engine.SetDivisionMode();
-            }
-
-            if (ruleSet == FizzBuzzRuleSet.FizzBuzzDigits ||
-                ruleSet == FizzBuzzRuleSet.FizzBuzzDivisibleOrDigits)
-            {
-                engine.SetDigitMode();
             }
 
             return engine;

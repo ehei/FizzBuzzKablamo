@@ -1,31 +1,31 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FizzBuzzKablamo
 {
     public class FizzBuzzEngine : IFizzBuzzEngineExtended
-    { 
-        private readonly HashSet<GameObject.Token> _supportedTokens = new HashSet<GameObject.Token>();
+    {
+        private readonly List<IEvaluatableGameObject> _digitEvaluators = new List<IEvaluatableGameObject>();
+        private readonly List<IEvaluatableGameObject> _divisionEvaluators = new List<IEvaluatableGameObject>();
+
         private bool _digitMode;
         private bool _divisionMode;
 
-        public bool Supports(GameObject.Token token)
-        {
-            return _supportedTokens.Contains(token);
-        }
-
         public bool ChecksDigits()
         {
-            return _digitMode;
+            return _digitEvaluators.Count > 0;
         }
 
         public bool ChecksDivisible()
         {
-            return _divisionMode;
+            return _divisionEvaluators.Count > 0;
+        }
+
+        public bool Supports(GameObject.Token token)
+        {
+            return _digitEvaluators.Exists(x => x.AsValue() == (int) token) ||
+                _divisionEvaluators.Exists(x => x.AsValue() == (int)token);
         }
 
         public void SetDigitMode()
@@ -40,55 +40,25 @@ namespace FizzBuzzKablamo
 
         public void Add(GameObject.Token token)
         {
-            _supportedTokens.Add(token);
-        }
-
-        public void Remove(GameObject.Token token)
-        {
-            _supportedTokens.Remove(token);
-        }
-
-        public bool CheckDivisible(int number, GameObject.Token token)
-        {
-            if (token == GameObject.Token.Invalid)
-                return false;
-
-            return ((number/(int) token) > 0) && ((number % (int)token) == 0);
-        }
-
-        public bool CheckDigit(int number, GameObject.Token token)
-        {
-            if (token == GameObject.Token.Invalid)
-                return false;
-
-            return number == (int)token;
-        }
-
-        public string GetString(int number)
-        {
-            string fullReturn = null;
+            if (_digitMode)
+                _digitEvaluators.Add(new Digitizer(token));
 
             if (_divisionMode)
-            {
-                string divisionReturn = _supportedTokens.Where(token => CheckDivisible(number, token)).Aggregate<GameObject.Token, string>(null, (current, token) => current + token.ToString());
+                _divisionEvaluators.Add(new Divisor(token));
+        }
+        
+        public string GetString(int number)
+        {
+            _digitEvaluators.Sort(new EvaluatableGameObjectComparer());
+            _divisionEvaluators.Sort(new EvaluatableGameObjectComparer());
 
-                if (! string.IsNullOrEmpty(divisionReturn))
-                    fullReturn += divisionReturn;
-            }
+            string fullReturn = _divisionEvaluators.Where(evaluator => evaluator.Evaluate(number)).Aggregate<IEvaluatableGameObject, string>(null, (current, evaluator) => current + evaluator.AsString());
 
-            if (_digitMode)
-            {
-                List<GameObject.Token> list = new List<GameObject.Token>();
+            if (!String.IsNullOrEmpty(fullReturn))
+                return fullReturn;
 
-                var digitize = number.ToString().ToCharArray();
-
-                var digitReturn = digitize.Aggregate<char, string>(null, (current1, digit) => 
-                    _supportedTokens.Where(token => 
-                        this.CheckDigit(Int32.Parse(digit.ToString()), token)).Aggregate(current1, (current, token) => current + token.ToString()));
-
-                if (!string.IsNullOrEmpty(digitReturn))
-                    fullReturn += digitReturn;
-            }
+            var digitize = number.ToString().ToCharArray();
+            fullReturn = (from digit in digitize select Int32.Parse(digit.ToString()) into value from evaluator in _digitEvaluators where evaluator.Evaluate(value) select evaluator).Aggregate(fullReturn, (current, evaluator) => current + evaluator.AsString());
 
             return string.IsNullOrEmpty(fullReturn) ? number.ToString() : fullReturn;
         }
