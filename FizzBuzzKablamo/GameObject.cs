@@ -1,6 +1,6 @@
 ﻿namespace FizzBuzzKablamo
 {
-    public class GameObject
+    public abstract class GameObject
     {
         public enum Token
         {
@@ -12,21 +12,21 @@
             Invalid = 0
         }
 
-        private Token GameToken { get; set; }
-
-        public GameObject(Token gameToken)
+        protected GameObject(Token gameToken)
         {
             GameToken = gameToken;
         }
 
+        private Token GameToken { get; }
+
         public string AsString()
         {
-            return this.GameToken.ToString();
+            return GameToken.ToString();
         }
 
         public int AsValue()
         {
-            return (int)this.GameToken;
+            return (int) GameToken;
         }
     }
 }

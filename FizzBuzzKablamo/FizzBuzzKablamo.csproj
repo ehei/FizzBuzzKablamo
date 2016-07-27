@@ -43,10 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Digitizer.cs" />
+    <Compile Include="Divisor.cs" />
+    <Compile Include="EvaluatableGameObjectComparer.cs" />
     <Compile Include="FizzBuzzEngine.cs" />
     <Compile Include="FizzBuzzEngineFactory.cs" />
     <Compile Include="FizzBuzzRuleSet.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="IEvaluatableGameObject.cs" />
     <Compile Include="IFizzBuzzEngine.cs" />
     <Compile Include="IFizzBuzzEngineExtended.cs" />
     <Compile Include="Program.cs" />
